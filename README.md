@@ -1018,7 +1018,7 @@ nano /var/www/html/index.php
 ```
 nano /etc/nginx/sites-available/default
 ```
-- isian nano: /etc/nginx/sites-available/default ===
+- isian nano: /etc/nginx/sites-available/default 
  (Hapus semua isi lama, ganti dengan ini)
 ```
 server {
@@ -1138,4 +1138,11 @@ curl http://192.221.2.6:8004
 curl http://192.221.2.5:8005
 curl http://192.221.2.4:8006
 ```
+
+# Soal 14
+- Memasang  (Basic Authentication)
+- User: noldor
+- Pass: silvan
+
+~ Step 1 Galadriel (8004)
 
