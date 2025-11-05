@@ -1,9 +1,4 @@
 # (Di node Palantir)
-
-# Palantir juga butuh proxy APT agar bisa download
-echo 'Acquire::http::Proxy "http://192.221.5.2:3128";' > /etc/apt/apt.conf.d/99proxy.conf
-echo 'Acquire::https::Proxy "http://192.221.5.2:3128";' >> /etc/apt/apt.conf.d/99proxy.conf
-
 # Instal MariaDB Server
 apt update
 apt install mariadb-server -y

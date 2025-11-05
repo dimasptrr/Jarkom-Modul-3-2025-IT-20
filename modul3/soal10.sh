@@ -1,7 +1,6 @@
 apt update
 apt install nginx php8.4-fpm php8.4-mysql git -y
 
-
 #di elros
  nano /etc/nginx/sites-available/elros.conf
 
