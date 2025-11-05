@@ -1,30 +1,22 @@
-# (Di node Amandil)
+# (Di node Amandil/Gilgalad)
 apt update
 apt install apache2-utils -y
 
-# (Di node Worker: Elendil, Isildur, Anarion)
-# Buka sesi terpisah (separate terminal window) di setiap worker 
-# untuk memantau kondisi mereka selama serangan.
+# (Di Elendil, Isildur, dan Anarion)
 htop
 
 # (Di node Amandil)
-echo "--- SERANGAN AWAL (100 permintaan, 10 bersamaan) ---"
+echo "--- SERANGAN PENUH (2000 permintaan, 100 bersamaan - BASELINE TANPA WEIGHT) ---"
 
-ab -n 100 -c 10 -u netics:ajk20 http://elros.K20.com/api/airing
+# Catatan: Karena Anda tidak mencantumkan autentikasi di skrip Soal 10 Anda, 
+# kita asumsikan akses API tidak memerlukan username/password.
+ab -n 2000 -c 100 http://elros.K20.com/api/airing
 
-# (Di node Amandil)
-echo "--- SERANGAN PENUH (2000 permintaan, 100 bersamaan - BASELINE) ---"
-
-ab -n 2000 -c 100 -u netics:ajk20 http://elros.K20.com/api/airing
-
-# (Di node Elros)
-nano /etc/nginx/sites-available/default
-
-# --- 1. Definisikan Upstream dengan Weight ---
-upstream laravel_workers {
-    server 192.221.1.2:8001 weight=2; # Elendil menerima beban 2x lebih besar
-    server 192.221.1.3:8002 weight=1; # Isildur menerima beban normal
-    server 192.221.1.4:8003 weight=1; # Anarion menerima beban normal
+# --- Definisikan Upstream dengan Weight ---
+upstream kesatria_numenor {
+    server elendil.K20.com:8001 weight=2; # Elendil menerima 2x beban
+    server isildur.K20.com:8002 weight=1; # Isildur
+    server anarion.K20.com:8003 weight=1; # Anarion
 }
 # ... (Sisanya tetap sama) ...
 
@@ -32,10 +24,10 @@ upstream laravel_workers {
 service nginx restart
 
 # (Di node Amandil)
-echo "--- SERANGAN PENUH (2000 permintaan, 100 bersamaan - BERAT) ---"
+echo "--- SERANGAN PENUH (2000 permintaan, 100 bersamaan - DENGAN WEIGHT 2:1:1) ---"
 
-ab -n 2000 -c 100 -u netics:ajk20 http://elros.K20.com/api/airing
+ab -n 2000 -c 100 http://elros.K20.com/api/airing
 
-#Catat dan Bandingkan:
-#Tanpa Weight (Baseline): Catat "Failed requests" dan "Requests per second".
-#Dengan Weight (Strategi Bertahan): Catat "Failed requests" dan "Requests per second".
+- Bandingkan metrik "Requests per second" dan "Failed requests" dari kedua tes untuk menarik kesimpulan:
+
+- Jika Requests per second naik dan/atau Failed requests turun, strategi weight LEBIH BAIK.
