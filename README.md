@@ -1018,8 +1018,8 @@ nano /var/www/html/index.php
 ```
 nano /etc/nginx/sites-available/default
 ```
-# isian nano: /etc/nginx/sites-available/default ===
-# (Hapus semua isi lama, ganti dengan ini)
+- isian nano: /etc/nginx/sites-available/default ===
+ (Hapus semua isi lama, ganti dengan ini)
 ```
 server {
 #     # BEDA 1: "Gerbang Masuk" di 8005 [cite: 195]
