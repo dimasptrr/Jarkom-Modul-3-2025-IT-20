@@ -888,4 +888,105 @@ nameserver 192.221.3.2
  curl -s -o /dev/null -w "Status: %{http_code}\nWorker: %{remote_port}\n" http://elros.K20.com/```
 ```
 
-# Soal 12
+# Soal 12 & 13
+
+~ BAGIAN 0
+# 1. Nyalain "Saklar Jasa Titip" (Proxy)
+# (Di console 'Minastir')
+```
+service squid start
+```
+
+- 2. Nyalain "Saklar Kantor Telepon Utama" (DNS Master)
+# (Di console 'Erendis')
+```
+service bind9 start
+```
+
+- 3. Nyalain "Saklar Kantor Telepon Cadangan" (DNS Slave)
+# (Di console 'Amdir')
+```
+service bind9 start
+```
+
+~ BAGIAN 1: 'Galadriel' (Gerbang 8004)
+
+- 1. Atur "Jasa Titip" (Proxy) permanen untuk 'apt'
+```
+echo 'Acquire::http::Proxy "http://192.221.5.2:3128";' > /etc/apt/apt.conf.d/99proxy.conf
+echo 'Acquire::https::Proxy "http://192.221.5.2:3128";' >> /etc/apt/apt.conf.d/99proxy.conf
+```
+- 2. Atur "Buku Telepon" (DNS)
+```
+echo "nameserver 192.221.5.2" > /etc/resolv.conf
+echo "nameserver 192.221.3.2" >> /etc/resolv.conf
+echo "search k20.com" >> /etc/resolv.conf
+```
+
+- 3. Download "Katalog Harga"
+```
+apt-get update
+```
+
+- 4. "Belanja" Alat untuk Taman (Soal 12) 
+```
+apt-get install nginx php8.4-fpm -y
+```
+
+- 5. Buat file "Plang Nama"
+```
+nano /var/www/html/index.php
+```
+isi nano: /var/www/html/index.php ===
+```
+<?php
+ echo "Ini adalah Taman Digital " . gethostname();
+?>
+```
+
+- 6. Buka "Buku Aturan Penjaga Gerbang"
+```
+nano /etc/nginx/sites-available/default
+```
+isian nano: /etc/nginx/sites-available/default 
+#hapus yg lama
+```
+# server {
+#     # Soal 13: Atur "Gerbang Masuk" unik di port 8004 [cite: 195]
+#     listen 8004;
+# 
+#     root /var/www/html;
+#     index index.php index.html;
+# 
+#     # Soal 12: "Nama" Taman (dari soal4.sh)
+#     server_name galadriel.k20.com; 
+# 
+#     # Soal 12: "Penjaga Gerbang" (Tolak panggilan via IP) [cite: 193]
+#     if ($host != $server_name) {
+#         return 404;
+#     }
+# 
+#     location / {
+#         try_files $uri $uri/ =404;
+#     }
+# 
+#     # Soal 13: Sambungkan "Penjaga Gerbang" ke "Bibit Ajaib PHP" [cite: 194]
+#     location ~ \.php$ {
+#         include snippets/fastcgi-php.conf;
+#         fastcgi_pass unix:/run/php/php8.4-fpm.sock;
+#     }
+# }
+#
+```
+- 7. Tes "Aturan Penjaga Gerbang"
+```
+nginx -t
+```
+
+- 8. "Nyalakan Penjaga Gerbang"
+```
+service nginx restart
+service php8.4-fpm restart
+```
+
+
