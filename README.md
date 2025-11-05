@@ -1144,5 +1144,5 @@ curl http://192.221.2.4:8006
 - User: noldor
 - Pass: silvan
 
-~ Step 1 Galadriel (8004)
+Step 1 Galadriel (8004)
 
