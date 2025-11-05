@@ -891,19 +891,19 @@ nameserver 192.221.3.2
 # Soal 12 & 13
 
 - Step 0 :
-# 1. Nyalain "Saklar Jasa Titip" (Proxy)
-# (Di console 'Minastir')
+1. Nyalain "Saklar Jasa Titip" (Proxy)
+(Di console 'Minastir')
 ```
 service squid start
 ```
-# 2. Nyalain "Saklar Kantor Telepon Utama" (DNS Master)
-# (Di console 'Erendis')
+2. Nyalain "Saklar Kantor Telepon Utama" (DNS Master)
+(Di console 'Erendis')
 ```
 service bind9 start
 ``` 
 
-# 3. Nyalain "Saklar Kantor Telepon Cadangan" (DNS Slave)
-# (Di console 'Amdir')
+3. Nyalain "Saklar Kantor Telepon Cadangan" (DNS Slave)
+(Di console 'Amdir')
 ```
 service bind9 start
 ```
