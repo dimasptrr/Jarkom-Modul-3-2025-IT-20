@@ -890,14 +890,14 @@ nameserver 192.221.3.2
 
 # Soal 12 & 13
 
-~ BAGIAN 0
-# 1. Nyalain "Saklar Jasa Titip" (Proxy)
+Step 0
+1. Nyalain "Saklar Jasa Titip" (Proxy)
 # (Di console 'Minastir')
 ```
 service squid start
 ```
 
-- 2. Nyalain "Saklar Kantor Telepon Utama" (DNS Master)
+2. Nyalain "Saklar Kantor Telepon Utama" (DNS Master)
 # (Di console 'Erendis')
 ```
 service bind9 start
@@ -908,32 +908,31 @@ service bind9 start
 ```
 service bind9 start
 ```
+Step 1: 'Galadriel' (Gerbang 8004)
 
-~ BAGIAN 1: 'Galadriel' (Gerbang 8004)
-
-- 1. Atur "Jasa Titip" (Proxy) permanen untuk 'apt'
+1. Atur "Jasa Titip" (Proxy) permanen untuk 'apt'
 ```
 echo 'Acquire::http::Proxy "http://192.221.5.2:3128";' > /etc/apt/apt.conf.d/99proxy.conf
 echo 'Acquire::https::Proxy "http://192.221.5.2:3128";' >> /etc/apt/apt.conf.d/99proxy.conf
 ```
-- 2. Atur "Buku Telepon" (DNS)
+2. Atur "Buku Telepon" (DNS)
 ```
 echo "nameserver 192.221.5.2" > /etc/resolv.conf
 echo "nameserver 192.221.3.2" >> /etc/resolv.conf
 echo "search k20.com" >> /etc/resolv.conf
 ```
 
-- 3. Download "Katalog Harga"
+3. Download "Katalog Harga"
 ```
 apt-get update
 ```
 
-- 4. "Belanja" Alat untuk Taman (Soal 12) 
+4. "Belanja" Alat untuk Taman (Soal 12) 
 ```
 apt-get install nginx php8.4-fpm -y
 ```
 
-- 5. Buat file "Plang Nama"
+5. Buat file "Plang Nama"
 ```
 nano /var/www/html/index.php
 ```
@@ -944,7 +943,7 @@ isi nano: /var/www/html/index.php ===
 ?>
 ```
 
-- 6. Buka "Buku Aturan Penjaga Gerbang"
+6. Buka "Buku Aturan Penjaga Gerbang"
 ```
 nano /etc/nginx/sites-available/default
 ```
@@ -978,12 +977,12 @@ isian nano: /etc/nginx/sites-available/default
 # }
 #
 ```
-- 7. Tes "Aturan Penjaga Gerbang"
+7. Tes "Aturan Penjaga Gerbang"
 ```
 nginx -t
 ```
 
-- 8. "Nyalakan Penjaga Gerbang"
+8. "Nyalakan Penjaga Gerbang"
 ```
 service nginx restart
 service php8.4-fpm restart
