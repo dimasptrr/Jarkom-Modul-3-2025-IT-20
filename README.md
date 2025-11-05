@@ -1,11 +1,6 @@
 # Jarkom-Modul-3-2025-IT-20
-| Nama                  | NRP        |
-|-----------------------|------------|
-| Zahra Khaalishah      | 5027241070 |
-| Dimas Muhammad Putra  | 5027241076 |
 
-
-# soal 1
+# Soal 1
 - jadi pada soal 1 ini diminta untuk membuat konfigurasi sesuai dengan topologi yang sudah di buat
 - topologi untuk durin(server)
 ```
@@ -75,7 +70,7 @@ iface eth0 inet static
 up echo nameserver 192.168.122.1 > /etc/resolv.conf
 ```
 
-# soal 2
+# Soal 2
 - Tujuan dari skrip Soal 2 ini adalah Mengimplementasikan dan Menguji Layanan DHCP Dinamis dan Statis di jaringan Anda, menggunakan Durin sebagai perantara (Relay).
 - di aldarion
 ```
@@ -248,7 +243,7 @@ service bind9 restart
 
 - ketika cat /etc/resolv.conf di client dynamic (amandil dan gilgalad) ipnya minastir, dia bisa ping google
 
-# soal 4
+# Soal 4
 - Tujuan dari skrip Soal 4 ini adalah Mengimplementasikan dan Menguji Arsitektur DNS Master-Slave Internal untuk domain pribadi Anda (K20.com), dan menetapkan Erendis serta Amdir sebagai otoritas resolusi nama utama.
 
 - di Erendis dan Amdir:
@@ -404,7 +399,7 @@ echo "nameserver 192.221.3.3" >> /etc/resolv.conf
 echo "search K20.com" >> /etc/resolv.conf
 ```
 
-# soal 5
+# Soal 5
 - Tujuan dari Soal 5 ini adalah Menambah Fitur Lanjutan pada DNS Internal dan Mengaktifkan Pelacakan Balik (Reverse Lookup).
 - (Di node Erendis)
 ```
@@ -535,7 +530,7 @@ K20.com text = "Aliansi Terakhir=pharazon.K20.com"
 3.3.221.192.in-addr.arpa      name = ns2.K20.com.'
 ```
 
-# soal 6
+# Soal 6
 - Mengatur dan Menguji Kontrol Waktu Peminjaman Alamat IP (Lease Time) secara Berbeda untuk Setiap Kelompok Klien sesuai dengan ketentuan Raja Aldarion.   
 - (Di node Aldarion)
 ```nano /etc/dhcp/dhcpd.conf```
@@ -591,7 +586,7 @@ cat /var/lib/dhcp/dhclient.leases | grep "lease-time"
 cat /var/lib/dhcp/dhcpd.leases
 ```
 
-# soal 7
+# Soal 7
 - Tujuan dari skrip Soal 7 ini adalah Mengimplementasikan dan Menguji Basis Aplikasi Web (Laravel) pada Worker Node Anda.
 
 - 1. Konfigurasi DNS (Menggunakan Minastir BIND9 sebagai utama, Erendis sebagai internal)
@@ -678,7 +673,7 @@ service php8.4-fpm restart
 curl http://127.0.0.1
 ```
 
-# soal 8 
+# Soal 8 
 - Tujuan dari skrip Soal 8 ini adalah Mengintegrasikan Aplikasi Laravel dengan Database Terpusat (Palantir) dan Mengaktifkan Akses Port yang Terpisah/Unik untuk Setiap Worker.
 
 - (Di node Palantir)
@@ -806,7 +801,7 @@ lynx http://isildur.K20.com:8002
 lynx http://anarion.K20.com:8003
 ```
 
-# soal 10
+# Soal 10
 - Mengimplementasikan Load Balancer Nginx di Elros untuk mendistribusikan trafik aplikasi secara merata ke Worker Node (Elendil, Isildur, Anarion).
 - di elros
 ```
@@ -890,58 +885,4 @@ nameserver 192.221.3.2
 
 - Uji permintaan ketiga (harus ke Anarion:8003)
  ```
- curl -s -o /dev/null -w "Status: %{http_code}\nWorker: %{remote_port}\n" http://elros.K20.com/
- ```
-
-# soal 11
-
-- (Di node Amandil/Gilgalad)
-```
-apt update
-apt install apache2-utils -y
-```
-
-- (Di Elendil, Isildur, dan Anarion)
-```
-htop
-```
-
-- (Di node Amandil)
-```
-echo "--- SERANGAN PENUH (2000 permintaan, 100 bersamaan - BASELINE TANPA WEIGHT) ---"
-```
-
-- Catatan: Karena Anda tidak mencantumkan autentikasi di skrip Soal 10 Anda, 
-- kita asumsikan akses API tidak memerlukan username/password.
-```
-ab -n 2000 -c 100 http://elros.K20.com/api/airing
-```
-```
-nano /etc/nginx/sites-available/elros.conf
-```
-- ubah bagian upstream kesatria_numenor
-
-```
-# --- Definisikan Upstream dengan Weight ---
-upstream kesatria_numenor {
-    server elendil.K20.com:8001 weight=2; # Elendil menerima 2x beban
-    server isildur.K20.com:8002 weight=1; # Isildur
-    server anarion.K20.com:8003 weight=1; # Anarion
-}
-# ... (Sisanya tetap sama) ...
-```
-
-- (Di node Elros)
-```
-service nginx restart
-```
-- (Di node Amandil)
-```
-echo "--- SERANGAN PENUH (2000 permintaan, 100 bersamaan - DENGAN WEIGHT 2:1:1) ---"
-
-ab -n 2000 -c 100 http://elros.K20.com/api/airing
-```
-
-- Bandingkan metrik "Requests per second" dan "Failed requests" dari kedua tes untuk menarik kesimpulan:
-
-- Jika Requests per second naik dan/atau Failed requests turun, strategi weight LEBIH BAIK.
+ curl -s -o /dev/null -w "Status: %{http_code}\nWorker: %{remote_port}\n" http://elros.K20.com/```
