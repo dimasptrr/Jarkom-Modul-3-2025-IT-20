@@ -1202,12 +1202,15 @@ curl http://192.221.2.6:8004
 curl http://192.221.2.5:8005
 curl http://192.221.2.4:8006
 ```
+
+
 # Soal 14
 - Memasang  (Basic Authentication)
 - User: noldor
 - Pass: silvan
 
 - Step 1: TAMAN 'Galadriel' (Gerbang 8004)
+  
  1. Install alat 'htpasswd'
 ```
 apt-get install apache2-utils -y
@@ -1221,11 +1224,12 @@ mkdir /etc/nginx/rahasia
 ```
 htpasswd -c /etc/nginx/rahasia/.htpasswd noldor
 ```
-# 4. Edit konfigurasi nginx
+ 4. Edit konfigurasi nginx
 ```
 nano /etc/nginx/sites-available/default
 ```
 ~ (File: /etc/nginx/sites-available/default di Galadriel)
+
 ```
 # server {
 #     listen 8004;
@@ -1250,11 +1254,14 @@ nano /etc/nginx/sites-available/default
 #     }
 # }
 ```
+
  5. Terapkan "Aturan Satpam" baru
 ```
 nginx -t
 service nginx restart
 ```
+
+
 - Step 2:'Celeborn' (Gerbang 8005)
 
  1. Install alat 'htpasswd'
@@ -1268,6 +1275,7 @@ mkdir /etc/nginx/rahasia
  3. Buat file password
 ```
 htpasswd -c /etc/nginx/rahasia/.htpasswd noldor
+```
 (Ketik 'silvan' 2x)
 
  5. Edit konfigurasi nginx
@@ -1275,6 +1283,7 @@ htpasswd -c /etc/nginx/rahasia/.htpasswd noldor
 nano /etc/nginx/sites-available/default
 ```
 ~ (File: /etc/nginx/sites-available/default di Celeborn)
+
 ```
 # server {
 #     listen 8005;
@@ -1311,7 +1320,7 @@ service nginx restart
 ```
 apt-get install apache2-utils -y
 ```
-```
+
  2. Buat "Brankas"
 ```
 mkdir /etc/nginx/rahasia
@@ -1320,7 +1329,7 @@ mkdir /etc/nginx/rahasia
 ```
 htpasswd -c /etc/nginx/rahasia/.htpasswd noldor
 ```
-```
+
 (Ketik 'silvan' 2x)
 
  4. Edit konfigurasi nginx
@@ -1377,4 +1386,331 @@ curl http://oropher.k20.com:8006
 curl -u noldor:silvan http://galadriel.k20.com:8004
 curl -u noldor:silvan http://celeborn.k20.com:8005
 curl -u noldor:silvan http://oropher.k20.com:8006
+```
+
+# Soal 15
+ Meng-upgrade "Taman" untuk Mendeteksi IP Asli Pengunjung
+
+- Step 1: 'Galadriel'
+(Dijalankan di console 'Galadriel,celeborn,oropher')
+
+ 1. Buka "Buku Aturan Penjaga Gerbang" (nginx)
+```
+nano /etc/nginx/sites-available/default
+```
+~ (File: /etc/nginx/sites-available/default di Galadriel)
+```
+# (Cari blok 'location ~ \.php$ { ... }')
+#
+#     location ~ \.php$ {
+#         # tambhakan
+#         fastcgi_param X_REAL_IP $remote_addr;
+# 
+#         include snippets/fastcgi-php.conf;
+#         fastcgi_pass unix:/run/php/php8.4-fpm.sock;
+#     }
+```
+
+ 2. Buka file "Plang Nama" (index.php)
+```
+nano /var/www/html/index.php
+```
+~ (File: /var/www/html/index.php di Galadriel)
+ (Hapus semua isi lama, ganti dengan ini)
+```
+#
+# <?php
+# echo "Ini adalah Taman Digital " . gethostname() . "<br>";
+# 
+# // Soal 15: Baca "Surat Rahasia" (X_REAL_IP)
+# // Jika belum ada, pakai IP tamu biasa (REMOTE_ADDR)
+# $ip_asli = $_SERVER['X_REAL_IP'] ?? $_SERVER['REMOTE_ADDR'];
+# 
+# echo "IP Asli Pengunjung: " . $ip_asli;
+# ?>
+```
+
+ 3. Terapkan Perubahan (Restart Nginx & PHP)
+```
+nginx -t
+service nginx restart
+service php8.4-fpm restart
+```
+
+- Step 2: testing
+  
+ 1.Atur (DNS Erendis)
+```
+echo "nameserver 192.221.3.2" > /etc/resolv.conf
+echo "search k20.com" >> /etc/resolv.conf
+```
+ 2. 
+```
+curl -u noldor:silvan http://galadriel.k20.com:8004
+curl -u noldor:silvan http://celeborn.k20.com:8005
+curl -u noldor:silvan http://oropher.k20.com:8006
+```
+
+# Soal 16
+ Memasang (Reverse Proxy) Pharazon
+
+- Soal 1:
+ (Dijalankan di console 'Galadriel', 'Celeborn', DAN 'Oropher')
+
+ 1. Buka "Buku Aturan Penjaga Gerbang" (nginx)
+```
+nano /etc/nginx/sites-available/default
+```
+~ (File: /etc/nginx/sites-available/default di Galadriel/Celeborn/Oropher)
+```
+# (Cari dan HAPUS atau beri '#' pada 3 baris "Satpam Pintu" Soal 12)
+#
+#     # if ($host != $server_name) {
+#     #     return 404;
+#     # }
+```
+
+ 2. Terapkan Perubahan
+```
+nginx -t
+service nginx restart
+```
+
+- Step 2:  'Pharazon'
+
+ 1. Atur "Jasa Titip" (Proxy) permanen
+```
+echo 'Acquire::http::Proxy "http://192.221.5.2:3128";' > /etc/apt/apt.conf.d/99proxy.conf
+echo 'Acquire::https::Proxy "http://192.221.5.2:3128";' >> /etc/apt/apt.conf.d/99proxy.conf
+```
+ 2. Atur "Buku Telepon" (DNS)
+```
+echo "nameserver 192.221.5.2" > /etc/resolv.conf
+echo "nameserver 192.221.3.2" >> /etc/resolv.conf
+echo "search k20.com" >> /etc/resolv.conf
+```
+ 3. "Belanja" Alat (Install Nginx)
+```
+apt-get update
+apt-get install nginx -y
+```
+ 4. Buat "Buku Aturan Tukang Anter Tamu"
+```
+nano /etc/nginx/sites-available/default
+```
+~ (File: /etc/nginx/sites-available/default di Pharazon)
+ (HAPUS semua isi lama, ganti dengan ini. Ganti k20.com)
+```
+# # Soal 16: "Daftar Taman" (Pakai NAMA, bukan IP)
+# upstream Kesatria_Lorien {
+#     server galadriel.k20.com:8004;
+#     server celeborn.k20.com:8005;
+#     server oropher.k20.com:8006;
+# }
+# 
+# server {
+#     listen 80;
+#     server_name pharazon.k20.com;
+# 
+#     location / {
+#         [cite_start]# 1. Antar Tamu ke "Daftar Taman" [cite: 201]
+#         proxy_pass http://Kesatria_Lorien;
+#         
+#         [cite_start]# 2. (SOAL 16) Teruskan "Password" Tamu [cite: 201]
+#         proxy_set_header Authorization $http_authorization;
+#         
+#         [cite_start]# 3. (SOAL 15) Bikin "Surat Rahasia" IP Asli [cite: 198]
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#     }
+# }
+#
+```
+ 5. "Suruh Jaga"
+```
+nginx -t
+service nginx restart
+```
+
+- Step 3: testing (miriel)
+
+ 1.  Atur "Buku Telepon" (DNS Erendis)
+```
+echo "nameserver 192.221.3.2" > /etc/resolv.conf
+echo "search k20.com" >> /etc/resolv.conf
+```
+ 2. Tes "Gerbang Utama" Pharazon (Pakai Password Soal 14)
+```
+echo "--- TES GERBANG UTAMA (HARUS BERHASIL) ---"
+curl -u noldor:silvan http://pharazon.k20.com
+```
+- OUTPUT:
+ (Akan muncul salah satu dari 3 Taman, dengan IP Asli Miriel)
+```
+#
+# Ini adalah Taman Digital Galadriel<br>IP Asli Pengunjung: 192.221.1.5
+# ATAU
+# Ini adalah Taman Digital Celeborn<br>IP Asli Pengunjung: 192.221.1.5
+# ATAU
+# Ini adalah Taman Digital Oropher<br>IP Asli Pengunjung: 192.221.1.5
+```
+
+
+# Soal 17
+ Benchmark (Uji Beban) & Simulasi Gagal
+1. Menyerang Pharazon (Load Balancer) dengan 'ab'.
+2. Mematikan 1 "Taman" (Galadriel).
+3.  Menyerang Pharazon lagi untuk melihat apakah dia "pinter".
+
+- Step 1:
+ (Dijalankan di console 'Miriel')
+
+ 1. Atur (Proxy) permanen
+```
+echo 'Acquire::http::Proxy "http://192.221.5.2:3128";' > /etc/apt/apt.conf.d/99proxy.conf
+echo 'Acquire::https::Proxy "http://192.221.5.2:3128";' >> /etc/apt/apt.conf.d/99proxy.conf
+```
+
+ 2. Atur  (DNS Erendis)
+```
+echo "nameserver 192.221.3.2" > /etc/resolv.conf
+echo "search k20.com" >> /etc/resolv.conf
+```
+
+ 3. "Belanja" Alat Penyerbu ('ab' ada di sini)
+```
+apt-get update
+apt-get install apache2-utils -y
+```
+
+- Step 2: 
+ (Dijalankan di console 'Miriel')
+
+ 1. Serang Pharazon (pakai -A untuk password, BUKAN -u)
+ (Hasil harusnya 'Failed requests: 0')
+```
+echo "--- TES 1: SERANGAN SAAT SEMUA 'TAMAN' BUKA ---"
+ab -n 100 -c 10 -A noldor:silvan http://pharazon.k20.com/
+```
+
+- Step 3: 
+ 1. "Matikan" Taman Galadriel
+```
+echo "--- MEMATIKAN 'TAMAN' GALADRIEL ---"
+service nginx stop
+```
+
+- Step 4: test serangan
+ (Dijalankan di console 'Miriel')
+
+ 1. Serang Pharazon lagi
+ (Hasil harusnya 'Failed requests: 0' atau ADA)
+ (Kedua hasil = BENAR)
+```
+echo "--- TES 2: SERANGAN SAAT 1 'TAMAN' RUNTUH ---"
+ab -n 100 -c 10 -A noldor:silvan http://pharazon.k20.com/
+```
+- Step 5:
+ 1. Cek log error 'Pharazon'
+ (HARUS muncul error 'Connection refused' ke 'upstream' Galadriel) [cite: 204]
+ ```
+echo "--- MENGECEK LOG ERROR DI PHARAZON ---"
+cat /var/log/nginx/error.log
+```
+
+- Step 6
+ 1. "Nyalakan" kembali Taman Galadriel
+```
+echo "--- MENGHIDUPKAN KEMBALI 'TAMAN' GALADRIEL ---"
+service nginx start
+```
+
+# Soal 18
+ Konfigurasikan replikasi database Master-Slave menggunakan MariaDB. Jadikan Palantir sebagai Master. Konfigurasikan Narvi sebagai Slave yang secara otomatis menyalin semua data dari Palantir. Buktikan replikasi berhasil dengan membuat tabel baru di Master dan memeriksanya di Slave.
+
+
+1. Persiapan Node Slave (Narvi)
+
+ Instalasi MariaDB (jika belum)
+```
+apt-get update
+apt-get install mariadb-server -y
+```
+
+2. Konfigurasi Master (Palantir)
+(Di console Palantir)
+```
+# 1. Atur Master ID dan Log Binary
+nano /etc/mysql/mariadb.conf.d/50-server.cnf
+# Pastikan di bawah [mysqld]:
+# server-id       = 1
+# log-bin         = mysql-bin
+# bind-address    = 0.0.0.0
+Bash
+
+# 2. Restart MariaDB
+service mariadb restart
+Bash
+
+# 3. Buat User Replikasi dan Catat Posisi
+mysql -u root
+# Di dalam mysql>:
+CREATE USER 'replikator'@'192.221.4.4' IDENTIFIED BY 'passwordrahasia';
+GRANT REPLICATION SLAVE ON *.* TO 'replikator'@'192.221.4.4';
+FLUSH PRIVILEGES;
+SHOW MASTER STATUS;
+# (CATAT FILE DAN POSITION YANG MUNCUL)
+EXIT;
+```
+3. Konfigurasi Slave (Narvi)
+(Di console Narvi)
+```
+
+# 1. Atur Slave ID
+nano /etc/mysql/mariadb.conf.d/50-server.cnf
+# Pastikan di bawah [mysqld]:
+# server-id       = 2
+Bash
+
+# 2. Restart MariaDB
+service mariadb restart
+Bash
+
+# 3. Sambungkan ke Master (GANTI DATA YANG DICATAT!)
+mysql -u root
+# Di dalam mysql>:
+CHANGE MASTER TO
+  MASTER_HOST='192.221.4.3',
+  MASTER_USER='replikator',
+  MASTER_PASSWORD='passwordrahasia',
+  MASTER_LOG_FILE='<FILE_DARI_PALANTIR>', 
+  MASTER_LOG_POS=<POSISI_DARI_PALANTIR>;
+START SLAVE;
+EXIT;
+```
+4. Verifikasi Replikasi
+(Di console Narvi)
+
+```
+# 1. Cek Status (Harus Slave_IO_Running: Yes dan Slave_SQL_Running: Yes)
+mysql -u root
+# Di dalam mysql>:
+SHOW SLAVE STATUS\G
+EXIT;
+(Di console Palantir - Master)
+
+Bash
+
+# 2. Buat Database Uji Coba di Master
+mysql -u root
+# Di dalam mysql>:
+CREATE DATABASE tes_replikasi_berhasil;
+EXIT;
+(Di console Narvi - Slave)
+
+# 3. Cek Database Uji Coba di Slave (Harus muncul)
+mysql -u root
+# Di dalam mysql>:
+SHOW DATABASES;
+EXIT;
 ```
