@@ -1709,3 +1709,57 @@ mysql -u root
 SHOW DATABASES;
 EXIT;
 ```
+
+# Soal 19
+Implementasikan rate limiting pada kedua Load Balancer (Elros dan Pharazon) menggunakan Nginx. Batasi agar satu alamat IP hanya bisa melakukan 10 permintaan per detik. Uji coba dengan menjalankan ab dari satu client dengan konkurensi tinggi (-c 50 atau lebih) dan periksa log Nginx untuk melihat pesan request yang ditolak atau ditunda karena rate limit.
+
+- Pasang Aturan Tol Utama (Global)
+(Lakukan di console Elros DAN Pharazon)
+
+ 1. Buka File Konfigurasi Nginx Utama
+```
+nano /etc/nginx/nginx.conf
+```
+
+ 2. Tambahkan Aturan Tol Utama (di dalam blok 'http { ... }')
+ Mendefinisikan zona rate limit: 10 request per detik per IP
+```
+limit_req_zone $binary_remote_addr zone=batasin_ip:10m rate=10r/s;
+```
+- Terapkan Gerbang Tol (Server Lokal)
+(Lakukan di console Elros DAN Pharazon)
+
+ 1. Buka File Konfigurasi Server Lokal (Gerbang Utama)
+```
+nano /etc/nginx/sites-available/default
+```
+
+ 2. Terapkan Aturan Tol (di dalam blok 'location / { ... }')
+ Menerapkan zona limit yang sudah didefinisikan
+```
+limit_req zone=batasin_ip;
+```
+ - Nyalakan Benteng
+(Lakukan di console Elros DAN Pharazon)
+
+ 1. Cek Syntax dan Restart Nginx
+```
+nginx -t
+service nginx restart
+```
+- Uji Coba Serangan Massal (Verifikasi)
+(Di console Miriel - Client)
+
+ 1. Serang Elros (Worker Laravel) - Memicu Rate Limit
+ Kita uji dengan konkurensi 50 (jauh di atas batas 10/detik) 
+```
+ab -n 200 -c 50 http://elros.k20.com/api/airing
+```
+(Di console Elros)
+
+ 2. Cek Log Nginx (Mencari bukti penolakan/penundaan request)
+ Pesan ini menandakan Rate Limiting sedang bekerja
+```
+cat /var/log/nginx/error.log | grep "limiting requests"
+```
+Verifikasi: Log harus menunjukkan pesan delaying request atau rejecting request.
