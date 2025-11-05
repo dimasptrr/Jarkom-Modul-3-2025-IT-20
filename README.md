@@ -1130,7 +1130,7 @@ apt-get install curl -y
 
 - Testing
 
-# Ini membuktikan Soal 13 (port unik) & Soal 12 (PHP) bekerja.
+- Membuktikan Soal 13 (port unik) & Soal 12 (PHP) bekerja.
 ```
 echo "--- TES 1:panggil nama (HARUS BERHASIL) ---"
 curl http://galadriel.k20.com:8004
