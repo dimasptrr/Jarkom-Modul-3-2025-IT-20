@@ -886,3 +886,90 @@ nameserver 192.221.3.2
 - Uji permintaan ketiga (harus ke Anarion:8003)
  ```
  curl -s -o /dev/null -w "Status: %{http_code}\nWorker: %{remote_port}\n" http://elros.K20.com/```
+```
+
+# Soal 12
+- Para Penguasa Peri (Galadriel, Celeborn, Oropher) membangun taman digital mereka menggunakan PHP.  
+- Instal nginx dan php8.4-fpm di setiap node worker PHP.  
+- Buat file index.php sederhana di /var/www/html masing-masing yang menampilkan nama hostname mereka.  
+- Buat agar akses web hanya bisa melalui domain nama, tidak bisa melalui IP.  
+
+# SOAL 12 & 13
+# PARA PENGUASA PERI (GALADRIEL, CELEBORN, OROPHER)
+
+```
+# Instalasi nginx dan PHP8.4-FPM di setiap node
+apt-get update
+apt-get install nginx php8.4-fpm -y
+
+# Jalankan service
+service nginx start
+service php8.4-fpm start
+
+# Buat file index.php yang menampilkan hostname
+echo "<?php echo gethostname(); ?>" > /var/www/html/index.php
+
+# Konfigurasi Nginx agar hanya dapat diakses via domain
+nano /etc/nginx/sites-available/default
+
+# Tambahkan konfigurasi berikut sesuai node:
+server {
+    listen 80;
+    server_name galadriel.k20.com;
+    root /var/www/html;
+    index index.php index.html;
+    
+    if ($host != "galadriel.k20.com") {
+        return 403;
+    }
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php8.4-fpm.sock;
+    }
+}
+
+# Restart nginx
+service nginx restart
+```
+
+---
+
+## Soal 13
+- Setiap taman Peri harus dapat diakses.  
+- Konfigurasikan nginx di setiap worker PHP untuk meneruskan permintaan file .php ke socket php-fpm yang sesuai.  
+- Atur agar Galadriel mendengarkan di port 8004, Celeborn di 8005, dan Oropher di 8006.  
+
+```
+```
+# SOAL 13 - KONFIGURASI PORT DAN SOCKET PHP-FPM
+
+```
+# Contoh di node Galadriel:
+nano /etc/nginx/sites-available/default
+
+server {
+    listen 8004;
+    server_name galadriel.k20.com;
+    root /var/www/html;
+    index index.php index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php8.4-fpm.sock;
+    }
+}
+
+# Melakukan hal yang sama di Celeborn (8005) dan Oropher (8006)
+service nginx restart
+```
+
+---
