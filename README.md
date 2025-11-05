@@ -1,6 +1,6 @@
 # Jarkom-Modul-3-2025-IT-20
 
-# soal 1
+# Soal 1
 - jadi pada soal 1 ini diminta untuk membuat konfigurasi sesuai dengan topologi yang sudah di buat
 - topologi untuk durin(server)
 ```
@@ -70,7 +70,7 @@ iface eth0 inet static
 up echo nameserver 192.168.122.1 > /etc/resolv.conf
 ```
 
-# soal 2
+# Soal 2
 - Tujuan dari skrip Soal 2 ini adalah Mengimplementasikan dan Menguji Layanan DHCP Dinamis dan Statis di jaringan Anda, menggunakan Durin sebagai perantara (Relay).
 - di aldarion
 ```
@@ -243,7 +243,7 @@ service bind9 restart
 
 - ketika cat /etc/resolv.conf di client dynamic (amandil dan gilgalad) ipnya minastir, dia bisa ping google
 
-# soal 4
+# Soal 4
 - Tujuan dari skrip Soal 4 ini adalah Mengimplementasikan dan Menguji Arsitektur DNS Master-Slave Internal untuk domain pribadi Anda (K20.com), dan menetapkan Erendis serta Amdir sebagai otoritas resolusi nama utama.
 
 - di Erendis dan Amdir:
@@ -399,7 +399,7 @@ echo "nameserver 192.221.3.3" >> /etc/resolv.conf
 echo "search K20.com" >> /etc/resolv.conf
 ```
 
-# soal 5
+# Soal 5
 - Tujuan dari Soal 5 ini adalah Menambah Fitur Lanjutan pada DNS Internal dan Mengaktifkan Pelacakan Balik (Reverse Lookup).
 - (Di node Erendis)
 ```
@@ -530,7 +530,7 @@ K20.com text = "Aliansi Terakhir=pharazon.K20.com"
 3.3.221.192.in-addr.arpa      name = ns2.K20.com.'
 ```
 
-# soal 6
+# Soal 6
 - Mengatur dan Menguji Kontrol Waktu Peminjaman Alamat IP (Lease Time) secara Berbeda untuk Setiap Kelompok Klien sesuai dengan ketentuan Raja Aldarion.   
 - (Di node Aldarion)
 ```nano /etc/dhcp/dhcpd.conf```
@@ -586,7 +586,7 @@ cat /var/lib/dhcp/dhclient.leases | grep "lease-time"
 cat /var/lib/dhcp/dhcpd.leases
 ```
 
-# soal 7
+# Soal 7
 - Tujuan dari skrip Soal 7 ini adalah Mengimplementasikan dan Menguji Basis Aplikasi Web (Laravel) pada Worker Node Anda.
 
 - 1. Konfigurasi DNS (Menggunakan Minastir BIND9 sebagai utama, Erendis sebagai internal)
@@ -673,7 +673,7 @@ service php8.4-fpm restart
 curl http://127.0.0.1
 ```
 
-# soal 8 
+# Soal 8 
 - Tujuan dari skrip Soal 8 ini adalah Mengintegrasikan Aplikasi Laravel dengan Database Terpusat (Palantir) dan Mengaktifkan Akses Port yang Terpisah/Unik untuk Setiap Worker.
 
 - (Di node Palantir)
@@ -801,7 +801,7 @@ lynx http://isildur.K20.com:8002
 lynx http://anarion.K20.com:8003
 ```
 
-# soal 10
+# Soal 10
 - Mengimplementasikan Load Balancer Nginx di Elros untuk mendistribusikan trafik aplikasi secara merata ke Worker Node (Elendil, Isildur, Anarion).
 - di elros
 ```
@@ -1263,7 +1263,7 @@ htpasswd -c /etc/nginx/rahasia/.htpasswd noldor
 ```
 nano /etc/nginx/sites-available/default
 ```
-# (File: /etc/nginx/sites-available/default di Oropher)
+(File: /etc/nginx/sites-available/default di Oropher)
 ```
 # server {
 #     listen 8006;
