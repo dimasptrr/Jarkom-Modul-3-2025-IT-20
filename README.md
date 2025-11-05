@@ -1,4 +1,14 @@
 # Jarkom-Modul-3-2025-IT-20
+**Laporan Resmi Praktikum Modul 3 — Komunikasi Data & Jaringan Komputer 2025**
+
+## Daftar Anggota
+
+| Nama                  | NRP        |
+|-----------------------|------------|
+| Zahra Khaalishah      | 5027241070 |
+| Dimas Muhammad Putra  | 5027241076 |
+
+---
 
 # Soal 1
 - jadi pada soal 1 ini diminta untuk membuat konfigurasi sesuai dengan topologi yang sudah di buat
@@ -1385,9 +1395,9 @@ curl -u noldor:silvan http://oropher.k20.com:8006
 # Soal 17
 - Benchmark (Uji Beban) & Simulasi Gagal
 
-1. Menyerang Pharazon (Load Balancer) dengan 'ab'.
-2. Mematikan 1 "Taman" (Galadriel).
-3. Menyerang Pharazon lagi untuk melihat apakah dia "pinter".
+1. Menyerang Pharazon (Load Balancer) dengan 'ab'
+2. Mematikan 1 "Taman" (Galadriel)
+3. Menyerang Pharazon lagi
 
 - Step 1:
 (Dijalankan di console 'Miriel')
