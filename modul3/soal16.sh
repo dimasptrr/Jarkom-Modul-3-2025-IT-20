@@ -73,7 +73,7 @@ service nginx restart
 
 # BAGIAN 3: testing (miriel)
 
-# 1. (WAJIB) Atur "Buku Telepon" (DNS Erendis)
+# 1. Atur "Buku Telepon" (DNS Erendis)
 echo "nameserver 192.221.3.2" > /etc/resolv.conf
 echo "search k20.com" >> /etc/resolv.conf
 
