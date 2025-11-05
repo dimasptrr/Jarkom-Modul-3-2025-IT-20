@@ -1145,4 +1145,52 @@ curl http://192.221.2.4:8006
 - Pass: silvan
 
 Step 1 Galadriel (8004)
+1. Install alat 'htpasswd'
+```
+apt-get install apache2-utils -y
+```
+2. Buat folder "Brankas" untuk file password
+```
+mkdir /etc/nginx/rahasia
+```
+3. Buat file password & user 'noldor'
+(Ketik 'silvan' 2x)
+```
+htpasswd -c /etc/nginx/rahasia/.htpasswd noldor
+```
+4. Edit konfigurasi nginx
+```
+nano /etc/nginx/sites-available/default
+```
+(File: /etc/nginx/sites-available/default di Galadriel)
+```
+# server {
+#     listen 8004;
+#     root /var/www/html;
+#     index index.php index.html;
+#     server_name galadriel.k20.com; 
+# 
+#     # --- TAMBAHAN SOAL 14 ---
+#     auth_basic "Taman Terlarang! Password?";
+#     auth_basic_user_file /etc/nginx/rahasia/.htpasswd;
+#     # -----------------------
+# 
+#     if ($host != $server_name) {
+#         return 404;
+#     }
+#     location / {
+#         try_files $uri $uri/ =404;
+#     }
+#     location ~ \.php$ {
+#         include snippets/fastcgi-php.conf;
+#         fastcgi_pass unix:/run/php/php8.4-fpm.sock;
+#     }
+# }
+```
+5. Terapkan "Aturan Satpam" baru
+```
+nginx -t
+service nginx restart
+```
+
 
