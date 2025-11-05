@@ -1646,11 +1646,9 @@ nano /etc/mysql/mariadb.conf.d/50-server.cnf
 # server-id       = 1
 # log-bin         = mysql-bin
 # bind-address    = 0.0.0.0
-Bash
 
 # 2. Restart MariaDB
 service mariadb restart
-Bash
 
 # 3. Buat User Replikasi dan Catat Posisi
 mysql -u root
@@ -1670,11 +1668,9 @@ EXIT;
 nano /etc/mysql/mariadb.conf.d/50-server.cnf
 # Pastikan di bawah [mysqld]:
 # server-id       = 2
-Bash
 
 # 2. Restart MariaDB
 service mariadb restart
-Bash
 
 # 3. Sambungkan ke Master (GANTI DATA YANG DICATAT!)
 mysql -u root
@@ -1699,7 +1695,6 @@ SHOW SLAVE STATUS\G
 EXIT;
 (Di console Palantir - Master)
 
-Bash
 
 # 2. Buat Database Uji Coba di Master
 mysql -u root
