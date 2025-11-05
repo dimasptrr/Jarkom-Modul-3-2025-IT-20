@@ -1,7 +1,7 @@
 # SOAL 15
 # Meng-upgrade "Taman" untuk Mendeteksi IP Asli Pengunjung
 
-# BAGIAN 1: 🧝‍♀️ UPGRADE TAMAN 'Galadriel'
+# BAGIAN 1: 'Galadriel'
 # (Dijalankan di console 'Galadriel,celeborn,oropher')
 
 # 1. Buka "Buku Aturan Penjaga Gerbang" (nginx)
