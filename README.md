@@ -1115,7 +1115,7 @@ service nginx restart
 service php8.4-fpm restart
 ```
 
-- Step 4: testin jalankan di miriel
+- Step 4: Testing jalankan di miriel
 ```
 # 1. Atur "Buku Telepon" (DNS)
 echo "nameserver 192.221.3.2" > /etc/resolv.conf
@@ -1127,10 +1127,6 @@ echo 'Acquire::http::Proxy "http://192.221.5.2:3128";' > /etc/apt/apt.conf.d/99p
 apt-get update
 apt-get install curl -y
 ```
-
-- Testing
-
-- Membuktikan Soal 13 (port unik) & Soal 12 (PHP) bekerja.
 ```
 echo "--- TES 1:panggil nama (HARUS BERHASIL) ---"
 curl http://galadriel.k20.com:8004
